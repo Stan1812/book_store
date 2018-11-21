@@ -1,4 +1,4 @@
-package com.expr.bookstore;
+package com.expr.bookstore.dao;
 
 
 import javax.persistence.Entity;
