@@ -1,7 +1,7 @@
 package com.expr.bookstore.controllers;
 
-import com.expr.bookstore.dao.User;
-import com.expr.bookstore.dao.UserRepository;
+
+import com.expr.bookstore.dao.repository.UserRepository;
 import com.expr.bookstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,17 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
 
     @GetMapping(path = "/add")
     public @ResponseBody
-    int addNewUser(@RequestParam String name, @RequestParam String email) {
-        return userService.addUser(name, email);
-    }
-    @GetMapping(path = "/all")
-    public @ResponseBody
-    Iterable<User> getAllUsers() {
-        return userService.getAllUsers();
+    int addNewUser(@RequestParam String name, @RequestParam String password) {
+        return userService.addUser(name, password);
     }
 }
