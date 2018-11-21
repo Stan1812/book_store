@@ -32,7 +32,8 @@
 1. fork 仓库 `https://github.com/Stan1812/book_store.git`
 2. `git clone https://${your address}`
 3. IDEA导入本地项目（使用gradle，本项目依赖源已更改为阿里云镜像，无须担心速度）
-4. 分模块开发(如果你认为项目结构有问题，请尽早提出，因为我也觉得怪怪的)。完成模块，push代码，提交`pull request`
+4. 根据配置文件`/resources/application.properties`构建本地开发数据库
+5. 分模块开发(如果你认为项目结构有问题，请尽早提出，因为我也觉得怪怪的)。完成模块，push代码，提交`pull request`
 
 ### 文档格式及要求
 后端构建RESTFul API，应提供详尽的API文档供前端使用。
