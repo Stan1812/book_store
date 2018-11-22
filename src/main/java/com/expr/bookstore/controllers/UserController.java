@@ -21,7 +21,19 @@ public class UserController {
 
     @GetMapping(path = "/add")
     public @ResponseBody
-    int addNewUser(@RequestParam String name, @RequestParam String password) {
-        return userService.addUser(name, password);
+    int addNewUser(@RequestParam String username, @RequestParam String password) {
+        return userService.addUser(username, password);
+    }
+
+    @GetMapping(path = "/existedByUsername")
+    public @ResponseBody
+    boolean isExistedByUsername(@RequestParam String username) {
+        return userService.isExistedByUsername(username);
+    }
+
+    @GetMapping(path = "/existedByPhone")
+    public @ResponseBody
+    boolean isExistedByPhone(@RequestParam String phone) {
+        return userService.isExistedByPhone(phone);
     }
 }

@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * 实体类：书籍
+ */
 @Entity
 public class Book {
     @Id
@@ -21,7 +24,7 @@ public class Book {
 
     private String description;
 
-    private Long categoryId;
+    private Long categoryId;//类别
 
     public Book() {
     }

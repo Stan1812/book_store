@@ -8,9 +8,8 @@ import java.util.Optional;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
 
-    List<Book> findAllByCategoryId(Long category);
+    List<Book> findAllByCategoryId(Long category);//通过类别查询所有书籍
 
-    @Override
-    Optional<Book> findById(Long aLong);
+    Optional<Book> findById(Long aLong);//通过id查询书籍
 
 }

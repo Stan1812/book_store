@@ -6,19 +6,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
+/**
+ * 实体类：购物车
+ */
 @Entity
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date orderTime;
+    private Date orderTime;//创建时间or修改时间
 
-    private Double price;
+    private Double price;//总价
 
-    private Boolean state;
+    private Boolean state;//状态
 
-    private Long userId;
+    private Long userId;//所属用户
 
     public Orders() {
     }

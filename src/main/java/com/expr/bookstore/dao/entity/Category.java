@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * 实体类：书籍类别
+ */
 @Entity
 public class Category {
     @Id

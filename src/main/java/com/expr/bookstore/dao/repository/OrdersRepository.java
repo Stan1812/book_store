@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface OrdersRepository extends CrudRepository<Orders, Long> {
 
-    Optional<Orders> findByUserId(Long userId);
+    Optional<Orders> findByUserId(Long userId);//通过userId查询购物车
 
 }

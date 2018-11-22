@@ -5,19 +5,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * 实体类：购物车单项
+ */
 @Entity
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Integer quantity;
+    private Integer quantity;//该项所具有同种商品的数量
 
-    private Double price;
+    private Double price;//价格
 
-    private Long orderId;
+    private Long orderId;//所属购物车
 
-    private Long bookId;
+    private Long bookId;//书籍的id
 
     public OrderItem() {
     }

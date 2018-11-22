@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface OrderItemRepository extends CrudRepository<OrderItem, Long> {
 
-    List<OrderItem> findAllByOrderId(Long orderId);
+    List<OrderItem> findAllByOrderId(Long orderId);//通过orderId查询购物车单项
 
 }
