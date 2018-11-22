@@ -1,9 +1,11 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.User;
-
 public interface UserService {
-    public Iterable<User> getAllUsers();
 
-    public int addUser(String name, String email);
+    int addUser(String name, String password);//添加用户
+
+    boolean isExistedByUsername(String username);//判断用户是否存在
+
+    boolean isExistedByPhone(String phone);//判断用户是否存在
+
 }
