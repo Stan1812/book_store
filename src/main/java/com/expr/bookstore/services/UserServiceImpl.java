@@ -18,10 +18,8 @@ public class UserServiceImpl implements UserService {
      * @return 1
      */
     @Override
-    public int addUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
+    public int addUser(String username, String password, String phone, String cellphone, String email, String address) {
+        User user = new User(username, password, phone, cellphone, email, address);
         UserRepo.save(user);
         return 1;
     }

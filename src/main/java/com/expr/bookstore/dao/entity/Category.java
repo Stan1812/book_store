@@ -1,9 +1,6 @@
 package com.expr.bookstore.dao.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 实体类：书籍类别
@@ -19,6 +16,11 @@ public class Category {
     private String description;
 
     public Category() {
+    }
+
+    public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public Long getId() {

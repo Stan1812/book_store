@@ -11,18 +11,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(path = "/demo") // This means URL's start with /demo (after Application path)
+@RequestMapping(path = "/user") // This means URL's start with /demo (after Application path)
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
+
+//    @Autowired
+//    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
 
-    @GetMapping(path = "/add")
+
+    @GetMapping(path = "/addUser")
     public @ResponseBody
-    int addNewUser(@RequestParam String username, @RequestParam String password) {
-        return userService.addUser(username, password);
+    int addNewUser(@RequestParam String username, @RequestParam String password,
+                   @RequestParam String phone, @RequestParam String cellphone,
+                   @RequestParam String email, @RequestParam String address) {
+        return userService.addUser(username, password, phone, cellphone, email, address);
     }
 
     @GetMapping(path = "/existedByUsername")

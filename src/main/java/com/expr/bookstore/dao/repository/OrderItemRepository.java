@@ -1,12 +1,23 @@
 package com.expr.bookstore.dao.repository;
 
 import com.expr.bookstore.dao.entity.OrderItem;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderItemRepository extends CrudRepository<OrderItem, Long> {
 
     List<OrderItem> findAllByOrderId(Long orderId);//通过orderId查询购物车单项
 
+    OrderItem findByBookIdAndOrderId(Long bookId, Long orderId);//通过bookId和orderId查询用户购物车项
+
+    @Modifying
+    @Query("update OrderItem set quantity=?1,price=?2 where id=?3")
+    int modifyById(Integer quantity, Double price, Long id);//修改购物车项中书的数量和总价价格
+
+    @Override
+    void deleteById(Long aLong);//通过id删除购物车项
 }

@@ -26,6 +26,13 @@ public class Orders {
     public Orders() {
     }
 
+    public Orders(Date orderTime, Double price, Boolean state, Long userId) {
+        this.orderTime = orderTime;
+        this.price = price;
+        this.state = state;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }

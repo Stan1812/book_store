@@ -29,6 +29,15 @@ public class User {
     public User() {
     }
 
+    public User(String username, String password, String phone, String cellphone, String email, String address) {
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.cellphone = cellphone;
+        this.email = email;
+        this.address = address;
+    }
+
     public Long getId() {
         return id;
     }
