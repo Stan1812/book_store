@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderItemRepository extends CrudRepository<OrderItem, Long> {
 
-    List<OrderItem> findAllByOrderId(Long orderId);//通过orderId查询购物车单项
+    List<OrderItem> findAllByOrderId(Long orderId);//通过orderId查询用户的所有购物车项
 
-    OrderItem findByBookIdAndOrderId(Long bookId, Long orderId);//通过bookId和orderId查询用户购物车项
+    OrderItem findOrderItemByBookIdAndOrderId(Long bookId, Long orderId);//通过bookId和orderId查询用户的某一个购物车项
+
+    OrderItem findOrderItemById(Long orderItemId);//通过orderItemId查询用户的某一购物车项
 
     @Modifying
     @Query("update OrderItem set quantity=?1,price=?2 where id=?3")

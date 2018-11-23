@@ -20,20 +20,24 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     /**
      * 添加购物车项，如果已在购物车中，就增加数量和价格，否则添加进数据库
-     * @param ordersId 购物车的id
+     * @param orderId 购物车的id
      * @param bookId 书籍的id
      * @return 1
      */
     @Override
-    public int addOrderItemService(Long ordersId, Long bookId) {
+    public int addOrderItemService(Long orderId, Long bookId) {
         OrderItem orderItem = null;
         Book book = bookRepo.findBookById(bookId);
-        if ((orderItem = ordersItemRepo.findByBookIdAndOrderId(bookId, ordersId)) == null) {
-            orderItem = new OrderItem(1, book.getPrice(), ordersId, bookId);
+        //用户购物车中没有该项，插入数据库中
+        if ((orderItem = ordersItemRepo.findOrderItemByBookIdAndOrderId(bookId, orderId)) == null) {
+            orderItem = new OrderItem(1, book.getPrice(), orderId, bookId);
             ordersItemRepo.save(orderItem);
         }
+        //用户购物车中已存在该项，则更新购物车项，数量增加1， 价格也相应增加
         else {
-            addQuantityAndPriceByStep(orderItem, book);
+            orderItem.setQuantity(orderItem.getQuantity() - 1);
+            orderItem.setPrice(orderItem.getQuantity() * book.getPrice());
+            updateQuantityAndPrice(orderItem.getQuantity(), orderItem.getPrice(), orderItem.getId());
         }
         return 1;
     }
@@ -49,31 +53,52 @@ public class OrderItemServiceImpl implements OrderItemService {
 //        return !(ordersItemRepo.findByBookIdAndOrderId(bookId, orderId) == null);
 //    }
 
+//    /**
+//     * 更新购物车项，数量加一
+//     * @param orderItem 购物车项
+//     * @return 更新哪一行
+//     */
+//    @Override
+//    public int addQuantityAndPriceByStep(OrderItem orderItem) {
+//        Book book = bookRepo.findBookById(orderItem.getBookId());
+//        orderItem.setQuantity(orderItem.getQuantity() + 1);
+//        orderItem.setPrice(orderItem.getQuantity() * book.getPrice());
+//        return updateQuantityAndPrice(orderItem.getQuantity(), orderItem.getPrice(), orderItem.getId());
+//    }
+//
+//    /**
+//     * 更新购物车项，数量减一
+//     * @param orderItem 购物车项
+//     * @return 更新哪一行
+//     */
+//    @Override
+//    public int decQuantityAndPriceByStep(OrderItem orderItem) {
+//        Book book = bookRepo.findBookById(orderItem.getBookId());
+//        orderItem.setQuantity(orderItem.getQuantity() - 1);
+//        orderItem.setPrice(orderItem.getQuantity() * book.getPrice());
+//        updateQuantityAndPrice(orderItem.getQuantity(), orderItem.getPrice(), orderItem.getId());
+//        return 0;
+//    }
+
     /**
-     * 更新购物车项，加1
-     * @param orderItem 购物车项
-     * @return 更新哪一行
+     * 更新数量和价格
+     * @param number 数量
+     * @param price 价格
+     * @param id orderItemId
+     * @return 更新的哪一行
      */
     @Override
-    public int addQuantityAndPriceByStep(OrderItem orderItem, Book book) {
-        orderItem.setQuantity(orderItem.getQuantity() + 1);
-        orderItem.setPrice(orderItem.getQuantity() * book.getPrice());
-        return updateQuantityAndPrice(orderItem, orderItem.getQuantity());
+    public int updateQuantityAndPrice(Integer number, Double price, Long id) {
+        return ordersItemRepo.modifyById(number, price, id);
     }
 
+    /**
+     * 通过orderItemId删除购物车单项
+     * @param id orderItemId
+     */
     @Override
-    public int decQuantityAndPriceByStep(OrderItem orderItem) {
-        return 0;
-    }
-
-    @Override
-    public int updateQuantityAndPrice(OrderItem orderItem, Integer number) {
-        return 0;
-    }
-
-    @Override
-    public int deleteOrderItemById(Long id) {
-        return 0;
+    public void deleteOrderItemById(Long id) {
+        ordersItemRepo.deleteById(id);
     }
 
     /**

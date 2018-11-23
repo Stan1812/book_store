@@ -13,11 +13,11 @@ public interface OrderItemService {
 
 //    boolean isExisted(Long bookId, Long orderId);//判断是否存在
 
-    int addQuantityAndPriceByStep(OrderItem orderItem, Book book);//书籍的数目+1，价格加一倍
+//    int addQuantityAndPriceByStep();//书籍的数目+1
+//
+//    int decQuantityAndPriceByStep(OrderItem orderItem);//书籍的数目-1，
 
-    int decQuantityAndPriceByStep(OrderItem orderItem);//书籍的数目-1，
+    int updateQuantityAndPrice(Integer number, Double price, Long id);//书籍数目任意，价格相应增加
 
-    int updateQuantityAndPrice(OrderItem orderItem, Integer number);//书籍数目任意，价格相应增加
-
-    int deleteOrderItemById(Long id);//通过id删除数据库中的购物车项
+    void deleteOrderItemById(Long id);//通过id删除数据库中的购物车项
 }
