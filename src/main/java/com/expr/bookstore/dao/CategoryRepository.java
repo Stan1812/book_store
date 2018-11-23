@@ -1,6 +1,6 @@
-package com.expr.bookstore.dao.repository;
+package com.expr.bookstore.dao;
 
-import com.expr.bookstore.dao.entity.Category;
+import com.expr.bookstore.entity.Category;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

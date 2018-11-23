@@ -1,6 +1,6 @@
 package com.expr.bookstore.controllers;
 
-import com.expr.bookstore.dao.entity.Book;
+import com.expr.bookstore.entity.Book;
 import com.expr.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @PostMapping(path = "/add")
-    public @ResponseBody int addNewBook(@RequestParam String name, @RequestParam String author,
+    public @ResponseBody Book addNewBook(@RequestParam String name, @RequestParam String author,
                                         @RequestParam Double price, @RequestParam String image,
                                         @RequestParam String description, @RequestParam Long categoryId) {
         return bookService.addNewBook(name, author, price, image, description, categoryId);

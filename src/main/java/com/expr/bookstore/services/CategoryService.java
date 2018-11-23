@@ -1,12 +1,12 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Category;
+import com.expr.bookstore.entity.Category;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    int addNewCategory(String name, String description);
+    Category addNewCategory(String name, String description);
 
     List<Category> queryAllCategory();
 

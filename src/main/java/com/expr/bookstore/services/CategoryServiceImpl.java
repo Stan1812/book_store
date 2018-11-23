@@ -1,7 +1,7 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Category;
-import com.expr.bookstore.dao.repository.CategoryRepository;
+import com.expr.bookstore.entity.Category;
+import com.expr.bookstore.dao.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,12 @@ public class CategoryServiceImpl implements CategoryService {
      * 添加新的书籍类别到数据库
      * @param name 书籍类别名
      * @param description 类别描述信息
-     * @return 1
+     * @return category
      */
     @Override
-    public int addNewCategory(String name, String description) {
+    public Category addNewCategory(String name, String description) {
         Category category = new Category(name, description);
-        categoryRepo.save(category);
-        return 1;
+        return categoryRepo.save(category);
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Book;
-import com.expr.bookstore.dao.entity.OrderItem;
+import com.expr.bookstore.entity.OrderItem;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface OrderItemService {
@@ -17,7 +17,9 @@ public interface OrderItemService {
 //
 //    int decQuantityAndPriceByStep(OrderItem orderItem);//书籍的数目-1，
 
+    @Transactional
     int updateQuantityAndPrice(Integer number, Double price, Long id);//书籍数目任意，价格相应增加
+
 
     void deleteOrderItemById(Long id);//通过id删除数据库中的购物车项
 }

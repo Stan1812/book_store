@@ -12,7 +12,7 @@ public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
 
-    @GetMapping(path = "/addOrderItem")
+    @PostMapping(path = "/addOrderItem")
     public @ResponseBody int addOrderItem(@RequestParam Long ordersId, @RequestParam Long bookId) {
         return orderItemService.addOrderItemService(ordersId, bookId);
     }

@@ -1,7 +1,7 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Book;
-import com.expr.bookstore.dao.repository.BookRepository;
+import com.expr.bookstore.entity.Book;
+import com.expr.bookstore.dao.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +24,12 @@ public class BookServiceImpl implements BookService {
      * @param image 图片路径
      * @param description 书籍简介
      * @param categoryId 书籍类别
-     * @return 1
+     * @return book
      */
     @Override
-    public int addNewBook(String name, String author, Double price, String image, String description, Long categoryId) {
+    public Book addNewBook(String name, String author, Double price, String image, String description, Long categoryId) {
         Book book = new Book(name, author, price, image, description, categoryId);
-        bookRepo.save(book);
-        return 1;
+        return bookRepo.save(book);
     }
 
     /**
@@ -49,7 +48,7 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public List<Book> queryBooksByCategoryId(Long categoryId) {
-        return bookRepo.findAllByCategoryId(categoryId);
+        return bookRepo.findBooksByCategoryId(categoryId);
     }
 
     /**

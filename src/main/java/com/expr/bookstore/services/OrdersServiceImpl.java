@@ -1,10 +1,11 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Orders;
-import com.expr.bookstore.dao.repository.OrdersRepository;
+import com.expr.bookstore.entity.Orders;
+import com.expr.bookstore.dao.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 @Service
@@ -22,10 +23,9 @@ public class OrdersServiceImpl implements OrdersService {
      * @return 1
      */
     @Override
-    public int addOrders(Date orderTime, Double price, Boolean state, Long userId) {
+    public Orders addOrders(Timestamp orderTime, Double price, Boolean state, Long userId) {
         Orders orders = new Orders(orderTime, price, state, userId);
-        ordersRepo.save(orders);
-        return 1;
+        return ordersRepo.save(orders);
     }
 
     /**

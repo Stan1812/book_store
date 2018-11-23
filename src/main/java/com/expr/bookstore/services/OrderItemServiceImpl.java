@@ -1,12 +1,13 @@
 package com.expr.bookstore.services;
 
-import com.expr.bookstore.dao.entity.Book;
-import com.expr.bookstore.dao.entity.OrderItem;
-import com.expr.bookstore.dao.repository.BookRepository;
-import com.expr.bookstore.dao.repository.OrderItemRepository;
+import com.expr.bookstore.entity.Book;
+import com.expr.bookstore.entity.OrderItem;
+import com.expr.bookstore.dao.BookRepository;
+import com.expr.bookstore.dao.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -87,6 +88,7 @@ public class OrderItemServiceImpl implements OrderItemService {
      * @param id orderItemId
      * @return 更新的哪一行
      */
+    @Transactional
     @Override
     public int updateQuantityAndPrice(Integer number, Double price, Long id) {
         return ordersItemRepo.modifyById(number, price, id);

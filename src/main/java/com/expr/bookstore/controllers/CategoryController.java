@@ -1,6 +1,6 @@
 package com.expr.bookstore.controllers;
 
-import com.expr.bookstore.dao.entity.Category;
+import com.expr.bookstore.entity.Category;
 import com.expr.bookstore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping(path = "/add")
-    public @ResponseBody int addNewCategory(@RequestParam String name, @RequestParam String description) {
+    public @ResponseBody Category addNewCategory(@RequestParam String name, @RequestParam String description) {
         return categoryService.addNewCategory(name, description);
     }
 
