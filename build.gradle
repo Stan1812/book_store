@@ -30,5 +30,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     // Use MySQL Connector-J
     compile 'mysql:mysql-connector-java'
+    // Use Json Web Token
+    compile 'com.auth0:java-jwt:3.4.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

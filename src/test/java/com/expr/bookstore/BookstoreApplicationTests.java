@@ -1,5 +1,6 @@
 package com.expr.bookstore;
 
+import com.expr.bookstore.controllers.UserController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ public class BookstoreApplicationTests {
 
     @Test
     public void contextLoads() {
+
     }
 
 }
