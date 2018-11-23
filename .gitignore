@@ -2,6 +2,11 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
+
+## node spider
+/spider/node_modules
+/spider/cached_html
+
 ### STS ###
 .apt_generated
 .classpath
