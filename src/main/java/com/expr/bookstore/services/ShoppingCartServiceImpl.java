@@ -27,15 +27,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
      * @return sc ShoppingCart的实体
      */
     @Override
-    public ShoppingCart addNewShoppingCart(Long userId, Long bookId) {
+    public ShoppingCart addNewShoppingCart(Long bookId, Long userId) {
         Book book = bookRepo.findBookById(bookId);
-        ShoppingCart sc = null;
-        if ((sc = scRepo.findShoppingCartByUserIdAndBookId(userId, bookId)) != null) {
+        ShoppingCart sc = scRepo.findShoppingCartByBookIdAndUserId(bookId, userId);
+        //购物车已经存在了该项
+        if (sc != null) {
             sc.setQuantity(sc.getQuantity() + 1);
-            updateShoppingCart(sc.getQuantity(), bookId);
+            updateShoppingCart(sc.getQuantity(), sc.getId());
         }
         else {
-            sc = new ShoppingCart(1, userId, bookId, book.getPrice());
+            sc = new ShoppingCart(1, bookId, userId, book.getPrice());
             scRepo.save(sc);
         }
         return sc;
@@ -46,9 +47,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
      * @return 一个整数
      */
     @Override
-    public int updateShoppingCart(Integer number, Long id) {
-        if (number >= 1) {
-            return scRepo.updateShoppingCart(number, id);
+    public int updateShoppingCart(Integer quantity, Long id) {
+        if (quantity >= 1) {
+            return scRepo.updateShoppingCart(quantity, id);
         }
         return -1;//禁止更新
     }

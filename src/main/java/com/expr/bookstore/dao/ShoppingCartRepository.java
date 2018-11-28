@@ -12,14 +12,14 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
 
     List<ShoppingCart> findAllByUserId(Long userId);//通过用户id查询出该用户的所有购物车项
 
-    ShoppingCart findShoppingCartById(Long id);
+    //ShoppingCart findShoppingCartById(Long id);
 
-    ShoppingCart findShoppingCartByUserIdAndBookId(Long userId, Long bookId);
+    ShoppingCart findShoppingCartByBookIdAndUserId(Long bookId, Long userId);
 
     @Transactional
     @Modifying
-    @Query("update ShoppingCart set number=?1 where id=?2")
-    int updateShoppingCart(Integer number, Long id);
+    @Query("update ShoppingCart set quantity=?1 where id=?2")
+    int updateShoppingCart(Integer quantity, Long id);
 
     @Transactional
     void deleteShoppingCartById(Long id);
