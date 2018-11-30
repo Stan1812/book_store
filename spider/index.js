@@ -74,19 +74,20 @@ const saveToDB = books => {
   connection.connect();
   // 数据库表结构待调整，暂时先放着
   let addSql =
-    'INSERT INTO book(Id,name,score,author,numberOfComments,press,press,year) VALUES(0,?,?,?,?)';
+    'INSERT INTO book(name,author,description,price) VALUES(?,?,?,?)';
   books.map(book => {
-    // let addParams = [
-    //   this.name,
-    //   this.score,
-    //   this.quote,
-    //   this.numberOfComments,
-    //   this.author,
-    //   this.press,
-    //   this.press,
-    //   this.year,
-    // ];
-    let addParams = book.values;
+    let addParams = [
+      book.name,
+      //   book.score,
+      book.quote,
+      //   book.numberOfComments,
+      book.author,
+      //   book.press,
+      parseFloat(book.price),
+      //   book.year,
+    ];
+    // let addParams = book.values;
+    log(addParams)
     connection.query(addSql, addParams, (err, result) => {
       if (err) {
         log(`ERROR:${err.message}`);
@@ -104,8 +105,8 @@ const runSpider = () => {
     let booksInPage = getBooksFromUrl(url);
     books = books.concat(booksInPage);
   }
-  savebook(books);
-  saveToDB(books);
+   savebook(books);
+//  saveToDB(books);
   log('loading success');
 };
 

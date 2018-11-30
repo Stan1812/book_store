@@ -6,6 +6,7 @@
 ## node spider
 /spider/node_modules
 /spider/cached_html
+/spider/douban.json
 
 ### STS ###
 .apt_generated
