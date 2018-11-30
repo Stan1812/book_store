@@ -8,7 +8,7 @@ import javax.persistence.Id;
 /**
  * 实体类：用户
  */
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

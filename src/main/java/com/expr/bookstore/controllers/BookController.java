@@ -26,8 +26,8 @@ public class BookController {
 
     @PostMapping(path = "/add")
     public @ResponseBody Book addNewBook(@RequestParam String name, @RequestParam String author,
-                                        @RequestParam Double price, @RequestParam String image,
-                                        @RequestParam String description, @RequestParam Long categoryId) {
+                                         @RequestParam Double price, @RequestParam String image,
+                                         @RequestParam String description, @RequestParam Long categoryId) {
         return bookService.addNewBook(name, author, price, image, description, categoryId);
     }
 
@@ -45,4 +45,5 @@ public class BookController {
     public @ResponseBody Book getBookByName(@RequestParam String name) {
         return bookService.queryBookByName(name);
     }
+
 }

@@ -14,33 +14,13 @@ import java.util.List;
 public class OrderItemServiceImpl implements OrderItemService {
 
     @Autowired
-    private BookRepository bookRepo;
-
-    @Autowired
     private OrderItemRepository ordersItemRepo;
 
-    /**
-     * 添加购物车项，如果已在购物车中，就增加数量和价格，否则添加进数据库
-     * @param orderId 购物车的id
-     * @param bookId 书籍的id
-     * @return 1
-     */
     @Override
-    public int addOrderItemService(Long orderId, Long bookId) {
-        OrderItem orderItem = null;
-        Book book = bookRepo.findBookById(bookId);
-        //用户购物车中没有该项，插入数据库中
-        if ((orderItem = ordersItemRepo.findOrderItemByBookIdAndOrderId(bookId, orderId)) == null) {
-            orderItem = new OrderItem(1, book.getPrice(), orderId, bookId);
-            ordersItemRepo.save(orderItem);
-        }
-        //用户购物车中已存在该项，则更新购物车项，数量增加1， 价格也相应增加
-        else {
-            orderItem.setQuantity(orderItem.getQuantity() - 1);
-            orderItem.setPrice(orderItem.getQuantity() * book.getPrice());
-            updateQuantityAndPrice(orderItem.getQuantity(), orderItem.getPrice(), orderItem.getId());
-        }
-        return 1;
+    public OrderItem addOrderItem(Integer quantity, Double price, Long orderId, Long bookId) {
+        OrderItem orderItem = new OrderItem(quantity, price, orderId, bookId);
+        ordersItemRepo.save(orderItem);
+        return orderItem;
     }
 
 //    /**
@@ -82,19 +62,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 //    }
 
     /**
-     * 更新数量和价格
-     * @param number 数量
-     * @param price 价格
-     * @param id orderItemId
-     * @return 更新的哪一行
-     */
-    @Transactional
-    @Override
-    public int updateQuantityAndPrice(Integer number, Double price, Long id) {
-        return ordersItemRepo.modifyById(number, price, id);
-    }
-
-    /**
      * 通过orderItemId删除购物车单项
      * @param id orderItemId
      */
@@ -104,7 +71,17 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     /**
-     * 查询用户购物车中的所有项
+     * 通过id查询订单项
+     * @param id 订单项号
+     * @return 订单实体
+     */
+    @Override
+    public OrderItem queryOrderItemById(Long id) {
+        return ordersItemRepo.findOrderItemById(id);
+    }
+
+    /**
+     * 通过orderId查询所有订单项
      * @param orderId 购物车id
      * @return 购物车项列表
      */

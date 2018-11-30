@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 实体类：购物车单项
+ * 实体类：订单项
  */
 @Entity
 public class OrderItem {
@@ -18,7 +18,7 @@ public class OrderItem {
 
     private Double price;//价格
 
-    private Long orderId;//所属购物车
+    private Long orderId;//所属用户的所有订单
 
     private Long bookId;//书籍的id
 

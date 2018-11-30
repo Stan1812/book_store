@@ -5,10 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
- * 实体类：购物车
+ * 实体类：订单
  */
 @Entity
 public class Orders {
@@ -16,7 +15,7 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Timestamp orderTime;//创建时间or修改时间
+    private Timestamp orderTime;//下单时间
 
     private Double price;//总价
 
