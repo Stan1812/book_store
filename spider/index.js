@@ -41,7 +41,6 @@ const bookFromTable = table => {
   let info = e('p[class=pl]')
     .text()
     .split(' / ');
-  console.log(info);
   let imgSrc = e('.nbg img').attr('src');
   book.imgSrc = imgSrc;
   let infoLength = info.length;
@@ -85,21 +84,22 @@ const downloadPic = (src, dest) => {
 
 const saveToDB = books => {
   connection.connect();
-  // 数据库表结构待调整，暂时先放着
   let addSql =
-  'INSERT INTO book(name,author,press,price,score,comment_num,image,description,category_id) VALUES(?,?,?,?,?,?,?,?,?)';
-books.map((book,index) => {
-  let addParams = [
-    book.name,
-    book.author,
-    book.press,
-    parseFloat(book.price),
-    parseFloat(book.score),
-    book.numberOfComments,
-    index.toString(),
-    book.quote,
-    book.year,
-  ];
+    'INSERT INTO book(name,author,press,price,score,comment_num,image,description,category_id) VALUES(?,?,?,?,?,?,?,?,?)';
+  books.map((book, index) => {
+    let addParams = [
+      book.name,
+      book.author,
+      book.press,
+      parseFloat(book.price) || 33,
+      // 部分书没价钱
+      parseFloat(book.score),
+      book.numberOfComments,
+      index.toString(),
+      book.quote || '推荐君被外星人抓走了',
+      book.year,
+    ];
+    console.log(addParams);
     connection.query(addSql, addParams, (err, result) => {
       if (err) {
         log(`ERROR:${err.message}`);
@@ -118,7 +118,7 @@ const runSpider = () => {
     books = books.concat(booksInPage);
   }
   savebook(books);
-   saveToDB(books);
+  saveToDB(books);
   log('loading success');
 };
 const init = () => {
