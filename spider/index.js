@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const path = require('path');
 const request = require('syncrequest');
 const cheerio = require('cheerio');
 const mysql = require('mysql');
@@ -9,7 +9,6 @@ const connection = mysql.createConnection({
   password: 'ThePassword',
   database: 'book_store',
 });
-
 const log = console.log;
 
 class Book {
@@ -43,6 +42,8 @@ const bookFromTable = table => {
     .text()
     .split(' / ');
   console.log(info);
+  let imgSrc = e('.nbg img').attr('src');
+  book.imgSrc = imgSrc;
   let infoLength = info.length;
   book.author = info[0];
   book.price = info[infoLength - 1];
@@ -65,16 +66,28 @@ const getBooksFromUrl = url => {
   return books;
 };
 
-const savebook = books => {
+const savebook = async books => {
   let s = JSON.stringify(books, null, 2);
+  books.map((book, index) => {
+    downloadPic(book.imgSrc, `./imgs/${index}.jpg`);
+  });
   let path = 'douban.json';
   fs.writeFileSync(path, s);
 };
+
+const downloadPic = (src, dest) => {
+  request(src)
+    .pipe(fs.createWriteStream(dest))
+    .on('close', function() {
+      console.log('pic saved!');
+    });
+};
+
 const saveToDB = books => {
   connection.connect();
   // 数据库表结构待调整，暂时先放着
   let addSql =
-    'INSERT INTO book(name,author,description,price) VALUES(?,?,?,?)';
+    'INSERT INTO book(name,author,description,price,press,) VALUES(?,?,?,?)';
   books.map(book => {
     let addParams = [
       book.name,
@@ -87,7 +100,7 @@ const saveToDB = books => {
       //   book.year,
     ];
     // let addParams = book.values;
-    log(addParams)
+    log(addParams);
     connection.query(addSql, addParams, (err, result) => {
       if (err) {
         log(`ERROR:${err.message}`);
@@ -105,9 +118,15 @@ const runSpider = () => {
     let booksInPage = getBooksFromUrl(url);
     books = books.concat(booksInPage);
   }
-   savebook(books);
-//  saveToDB(books);
+  savebook(books);
+  //  saveToDB(books);
   log('loading success');
 };
-
-runSpider();
+const init = () => {
+  const imgRoot = path.resolve(process.cwd(), 'imgs');
+  if (!fs.existsSync(imgRoot)) {
+    fs.mkdirSync(imgRoot);
+  }
+  runSpider();
+};
+init();
