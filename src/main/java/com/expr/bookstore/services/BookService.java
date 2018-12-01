@@ -11,9 +11,8 @@ public interface BookService {
     List<Book> queryAllBooks();
 
     List<Book> queryBooksByCategoryId(Long categoryId);
-
+    List<Book> queryChoices();
     Book queryBooksById(Long id);
 
     Book queryBookByName(String name);
-
 }

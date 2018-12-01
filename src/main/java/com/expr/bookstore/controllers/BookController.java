@@ -15,11 +15,12 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping(path = "/getAllBooks")
+    @GetMapping(path = "/all")
     public @ResponseBody
     List<Book> getAllBooks() {
         return bookService.queryAllBooks();
     }
+
     @PostMapping(path = "/add")
     public @ResponseBody
     Book addNewBook(@RequestParam String name,
@@ -34,18 +35,25 @@ public class BookController {
         return bookService.addNewBook(name, author, press, price, score, image, commentNum, description, categoryId);
     }
 
-    @PostMapping(path = "/getAllBooksByCategory")
+    @PostMapping(path = "/booksByCategory")
     public @ResponseBody
     List<Book> getAllBooksByCategory(@RequestParam Long categoryId) {
         return bookService.queryBooksByCategoryId(categoryId);
     }
-    @GetMapping(path = "/getBookById")
+
+    @GetMapping(path = "/bookById")
     public @ResponseBody
     Book getBookById(@RequestParam Long id) {
         return bookService.queryBooksById(id);
     }
 
-    @PostMapping(path = "/getBookByName")
+    @GetMapping(path = "/choice")
+    public @ResponseBody
+    List<Book> getChoice() {
+     return  bookService.queryChoices();
+    }
+
+    @GetMapping(path = "/bookByName")
     public @ResponseBody
     Book getBookByName(@RequestParam String name) {
         return bookService.queryBookByName(name);
