@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const path = require('path');
 const request = require('syncrequest');
 const cheerio = require('cheerio');
 const mysql = require('mysql');
@@ -9,7 +9,6 @@ const connection = mysql.createConnection({
   password: 'ThePassword',
   database: 'book_store',
 });
-
 const log = console.log;
 
 class Book {
@@ -42,7 +41,8 @@ const bookFromTable = table => {
   let info = e('p[class=pl]')
     .text()
     .split(' / ');
-  console.log(info);
+  let imgSrc = e('.nbg img').attr('src');
+  book.imgSrc = imgSrc;
   let infoLength = info.length;
   book.author = info[0];
   book.price = info[infoLength - 1];
@@ -65,28 +65,41 @@ const getBooksFromUrl = url => {
   return books;
 };
 
-const savebook = books => {
+const savebook = async books => {
   let s = JSON.stringify(books, null, 2);
+  // books.map((book, index) => {
+  //   downloadPic(book.imgSrc, `./imgs/${index}.jpg`);
+  // });
   let path = 'douban.json';
   fs.writeFileSync(path, s);
 };
+
+const downloadPic = (src, dest) => {
+  request(src)
+    .pipe(fs.createWriteStream(dest))
+    .on('close', function() {
+      console.log('pic saved!');
+    });
+};
+
 const saveToDB = books => {
   connection.connect();
-  // 数据库表结构待调整，暂时先放着
   let addSql =
-    'INSERT INTO book(Id,name,score,author,numberOfComments,press,press,year) VALUES(0,?,?,?,?)';
-  books.map(book => {
-    // let addParams = [
-    //   this.name,
-    //   this.score,
-    //   this.quote,
-    //   this.numberOfComments,
-    //   this.author,
-    //   this.press,
-    //   this.press,
-    //   this.year,
-    // ];
-    let addParams = book.values;
+    'INSERT INTO book(name,author,press,price,score,comment_num,image,description,category_id) VALUES(?,?,?,?,?,?,?,?,?)';
+  books.map((book, index) => {
+    let addParams = [
+      book.name,
+      book.author,
+      book.press,
+      parseFloat(book.price) || 33,
+      // 部分书没价钱
+      parseFloat(book.score),
+      book.numberOfComments,
+      index.toString(),
+      book.quote || '推荐君被外星人抓走了',
+      book.year,
+    ];
+    console.log(addParams);
     connection.query(addSql, addParams, (err, result) => {
       if (err) {
         log(`ERROR:${err.message}`);
@@ -108,5 +121,11 @@ const runSpider = () => {
   saveToDB(books);
   log('loading success');
 };
-
-runSpider();
+const init = () => {
+  const imgRoot = path.resolve(process.cwd(), 'imgs');
+  if (!fs.existsSync(imgRoot)) {
+    fs.mkdirSync(imgRoot);
+  }
+  runSpider();
+};
+init();
