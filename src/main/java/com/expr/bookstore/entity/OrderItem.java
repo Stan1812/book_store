@@ -1,4 +1,4 @@
-package com.expr.bookstore.dao.entity;
+package com.expr.bookstore.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 实体类：购物车单项
+ * 实体类：订单项
  */
 @Entity
 public class OrderItem {
@@ -18,11 +18,18 @@ public class OrderItem {
 
     private Double price;//价格
 
-    private Long orderId;//所属购物车
+    private Long orderId;//所属用户的所有订单
 
     private Long bookId;//书籍的id
 
     public OrderItem() {
+    }
+
+    public OrderItem(Integer quantity, Double price, Long orderId, Long bookId) {
+        this.quantity = quantity;
+        this.price = price;
+        this.orderId = orderId;
+        this.bookId = bookId;
     }
 
     public Long getId() {

@@ -1,4 +1,4 @@
-package com.expr.bookstore.dao.entity;
+package com.expr.bookstore.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 /**
  * 实体类：用户
  */
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,13 +20,19 @@ public class User {
 
     private String phone;
 
-    private String cellphone;
-
     private String email;
 
     private String address;
 
     public User() {
+    }
+
+    public User(String username, String password, String phone, String email, String address) {
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
     }
 
     public Long getId() {
@@ -59,14 +65,6 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
     }
 
     public String getEmail() {

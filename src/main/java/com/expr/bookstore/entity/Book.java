@@ -1,9 +1,6 @@
-package com.expr.bookstore.dao.entity;
+package com.expr.bookstore.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 实体类：书籍
@@ -27,6 +24,15 @@ public class Book {
     private Long categoryId;//类别
 
     public Book() {
+    }
+
+    public Book(String name, String author, Double price, String image, String description, Long categoryId) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.image = image;
+        this.description = description;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
