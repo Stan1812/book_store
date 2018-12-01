@@ -68,9 +68,9 @@ const getBooksFromUrl = url => {
 
 const savebook = async books => {
   let s = JSON.stringify(books, null, 2);
-  books.map((book, index) => {
-    downloadPic(book.imgSrc, `./imgs/${index}.jpg`);
-  });
+  // books.map((book, index) => {
+  //   downloadPic(book.imgSrc, `./imgs/${index}.jpg`);
+  // });
   let path = 'douban.json';
   fs.writeFileSync(path, s);
 };
@@ -87,20 +87,19 @@ const saveToDB = books => {
   connection.connect();
   // 数据库表结构待调整，暂时先放着
   let addSql =
-    'INSERT INTO book(name,author,description,price,press,) VALUES(?,?,?,?)';
-  books.map(book => {
-    let addParams = [
-      book.name,
-      //   book.score,
-      book.quote,
-      //   book.numberOfComments,
-      book.author,
-      //   book.press,
-      parseFloat(book.price),
-      //   book.year,
-    ];
-    // let addParams = book.values;
-    log(addParams);
+  'INSERT INTO book(name,author,press,price,score,comment_num,image,description,category_id) VALUES(?,?,?,?,?,?,?,?,?)';
+books.map((book,index) => {
+  let addParams = [
+    book.name,
+    book.author,
+    book.press,
+    parseFloat(book.price),
+    parseFloat(book.score),
+    book.numberOfComments,
+    index.toString(),
+    book.quote,
+    book.year,
+  ];
     connection.query(addSql, addParams, (err, result) => {
       if (err) {
         log(`ERROR:${err.message}`);
@@ -119,7 +118,7 @@ const runSpider = () => {
     books = books.concat(booksInPage);
   }
   savebook(books);
-  //  saveToDB(books);
+   saveToDB(books);
   log('loading success');
 };
 const init = () => {
