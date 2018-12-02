@@ -43,7 +43,7 @@ public class OrdersController {
      * @param userId 用户id
      * @return 订单及对应订单项
      */
-    @PostMapping(path = "/queryAllByUserId")
+    @GetMapping(path = "/queryAllByUserId")
     @ResponseBody
     public LinkedHashMap<Orders, List<OrderItem>> queryAllByUserId(@RequestParam Long userId) {
         LinkedHashMap<Orders, List<OrderItem>> map = new LinkedHashMap<>();

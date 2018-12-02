@@ -5,6 +5,8 @@ import com.expr.bookstore.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -23,6 +25,10 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(user);
     }
 
+    @Override
+    public User login(String userName,String password){
+     return  new User();
+    }
 //    /**
 //     * 在数据库中查找用户名为username的用户是否存在
 //     * @param username 用户名

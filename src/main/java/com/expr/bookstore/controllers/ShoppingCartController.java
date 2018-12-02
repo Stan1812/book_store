@@ -5,10 +5,7 @@ import com.expr.bookstore.entity.ShoppingCart;
 import com.expr.bookstore.services.ShoppingCartServce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,10 +25,10 @@ public class ShoppingCartController {
      * @param userId 用户id
      * @return Json格式的数据
      */
-    @PostMapping("/add")
+    @GetMapping("/add")
     @ResponseBody
-    public ShoppingCart addShoppingCart(@RequestParam Long bookId, @RequestParam Long userId) {
-        return scService.addNewShoppingCart(bookId, userId);
+    public ShoppingCart addShoppingCart(@RequestParam Integer bookId, @RequestParam Long userId) {
+        return scService.addNewShoppingCart((long)bookId,(long)1);
     }
 
     /**
@@ -56,7 +53,7 @@ public class ShoppingCartController {
         scService.deleteShoppingCart(id);
     }
 
-    @PostMapping("/getAllByUserId")
+    @GetMapping("/getall")
     @ResponseBody
     public List<ShoppingCart> getAllByUserId(Long userId) {
         return scService.queryAllShoppingCartsByUserId(userId);
