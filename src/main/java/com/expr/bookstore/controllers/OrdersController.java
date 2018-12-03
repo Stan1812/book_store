@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -27,12 +26,14 @@ public class OrdersController {
 
     @PostMapping(path = "/add")
     public @ResponseBody
-    Orders addNewOrders(@RequestParam Double price,
-                        @RequestParam Boolean state, @RequestParam Long userId) {
+    Orders addNewOrders(@RequestBody Orders order) {
+        Double price = order.getPrice();
+        Boolean state = order.getState();
+        Long userId = order.getId();
         return ordersService.addOrders(price, state, userId);
     }
 
-    @PostMapping(path = "/deleteById")
+    @GetMapping(path = "/deleteById")
     @ResponseBody
     public void deleteById(@RequestParam Long id) {
         ordersService.deleteOrderById(id);
@@ -40,6 +41,7 @@ public class OrdersController {
 
     /**
      * 查询某用户的所有订单以及订单中的商品项(OrderItem)
+     *
      * @param userId 用户id
      * @return 订单及对应订单项
      */

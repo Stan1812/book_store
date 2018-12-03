@@ -1,15 +1,11 @@
 package com.expr.bookstore.controllers;
 
 import com.expr.bookstore.entity.Book;
-import com.expr.bookstore.entity.Category;
 import com.expr.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -27,19 +23,20 @@ public class BookController {
 
     @PostMapping(path = "/add")
     public @ResponseBody
-    Book addNewBook(@RequestParam String name,
-                    @RequestParam String author,
-                    @RequestParam Double price,
-                    @RequestParam Double score,
-                    @RequestParam String press,
-                    @RequestParam String image,
-                    @RequestParam String description,
-                    @RequestParam Integer commentNum,
-                    @RequestParam Long categoryId) {
+    Book addNewBook(@RequestBody Book book) {
+        String name = book.getName();
+        String author = book.getAuthor();
+        Double price = book.getPrice();
+        Double score = book.getScore();
+        String press = book.getPress();
+        String image = book.getImage();
+        String description = book.getDescription();
+        Integer commentNum = book.getCommentNum();
+        Long categoryId = book.getCategoryId();
         return bookService.addNewBook(name, author, press, price, score, image, commentNum, description, categoryId);
     }
 
-    @PostMapping(path = "/booksByCategory")
+    @GetMapping(path = "/booksByCategory")
     public @ResponseBody
     List<Book> getAllBooksByCategory(@RequestParam Long categoryId) {
         return bookService.queryBooksByCategoryId(categoryId);
@@ -54,7 +51,7 @@ public class BookController {
     @GetMapping(path = "/choice")
     public @ResponseBody
     List<Book> getChoice() {
-     return  bookService.queryChoices();
+        return bookService.queryChoices();
     }
 
     @GetMapping(path = "/bookByName")
@@ -65,6 +62,7 @@ public class BookController {
 
     /**
      * 查询所有书籍时分页
+     *
      * @param page 第几页，从0开始
      * @param size 多大
      * @return books
@@ -77,9 +75,10 @@ public class BookController {
 
     /**
      * 按类别查询时分页
+     *
      * @param categoryId 类别id
-     * @param page 第几页，从0开始
-     * @param size 页面大小
+     * @param page       第几页，从0开始
+     * @param size       页面大小
      * @return books
      */
     @GetMapping(path = "/pageByCategoryId")
