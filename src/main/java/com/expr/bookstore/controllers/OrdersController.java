@@ -1,5 +1,6 @@
 package com.expr.bookstore.controllers;
 
+import com.expr.bookstore.entity.Book;
 import com.expr.bookstore.entity.OrderItem;
 import com.expr.bookstore.entity.Orders;
 import com.expr.bookstore.services.OrderItemService;
@@ -8,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -25,11 +29,21 @@ public class OrdersController {
     @Autowired
     private OrderItemService orderItemService;
 
+    /**
+     * 添加订单到数据库
+     * @param price 价格
+     * @param orderItems 订单项列表
+     * @param userId 用户id
+     * @return 存入的订单
+     */
     @PostMapping(path = "/add")
     public @ResponseBody
-    Orders addNewOrders(@RequestParam Double price,
-                        @RequestParam Boolean state, @RequestParam Long userId) {
-        return ordersService.addOrders(price, state, userId);
+    Orders addNewOrders(@RequestParam Double price, @RequestParam List<OrderItem> orderItems, @RequestParam Long userId) {
+        Timestamp date = new Timestamp(new Date().getTime());
+        for (OrderItem orderItem : orderItems) {
+            orderItemService.addOrderItem(orderItem.getQuantity(), orderItem.getPrice(), orderItem.getOrderId(), orderItem.getBookId());
+        }
+        return ordersService.addOrders(date, price, userId);
     }
 
     @PostMapping(path = "/deleteById")

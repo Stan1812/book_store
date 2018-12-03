@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping(path = "/login")
     public @ResponseBody
     Map login(@RequestParam String username, @RequestParam String password) throws ServletException {
-        if (username == "" || password == "")
+        if (username.equals("") || password.equals(""))
             throw new ServletException("Please fill in username and password");
         // Create Twt token
         String jwtToken = Jwts.builder().setSubject(username).claim("roles", "member").setIssuedAt(new Date())
@@ -45,32 +45,38 @@ public class UserController {
 
     /**
      * 用户注册
-     *
      * @param username 用户名
      * @param password 密码
      * @param phone    手机号
      * @param email    邮箱
      * @param address  地址
-     * @return 1
+     * @return 0代表用户已存在，添加失败；1代表添加成功
      */
     @PostMapping(path = "/register")
     public @ResponseBody
-    User addNewUser(@RequestParam String username, @RequestParam String password,
+    int addNewUser(@RequestParam String username, @RequestParam String password,
                     @RequestParam String phone, @RequestParam String email,
                     @RequestParam String address) {
-        return userService.addUser(username, password, phone, email, address);
+        User user = userService.queryUserByUsername(username);
+        if (user == null) {
+            return 0;
+        }
+        else {
+            userService.addUser(username, password, phone, email, address);
+            return 1;
+        }
     }
 
-    /**
-     * 通过用户名查询用户
-     *
-     * @param username 用户名
-     * @return 用户
-     */
-    @PostMapping(path = "/getUserByUsername")
-    public @ResponseBody
-    User getUserByUsername(@RequestParam String username) {
-        return userService.queryUserByUsername(username);
-    }
+//    /**
+//     * 通过用户名查询用户
+//     *
+//     * @param username 用户名
+//     * @return 用户
+//     */
+//    @PostMapping(path = "/getUserByUsername")
+//    public @ResponseBody
+//    User getUserByUsername(@RequestParam String username) {
+//        return userService.queryUserByUsername(username);
+//    }
 
 }
