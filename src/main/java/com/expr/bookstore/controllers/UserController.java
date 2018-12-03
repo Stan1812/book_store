@@ -57,13 +57,20 @@ public class UserController {
      */
     @PostMapping(path = "/register")
     public @ResponseBody
-    User addNewUser(@RequestBody User user) {
+    Integer addNewUser(@RequestBody User user) {
         String username = user.getUsername();
         String password = user.getPassword();
         String phone = user.getPhone();
         String email = user.getEmail();
         String address = user.getAddress();
-        return userService.addUser(username, password, phone, email, address);
+            User adjustUser = userService.queryUserByUsername(username);
+            if (adjustUser == null) {
+                return 0;
+            }
+            else {
+                userService.addUser(username, password, phone, email, address);
+                return 1;
+            }
     }
     /**
      * 通过用户名查询用户
@@ -76,4 +83,17 @@ public class UserController {
     User getUserByUsername(@RequestParam String username) {
         return userService.queryUserByUsername(username);
     }
+
+//    /**
+//     * 通过用户名查询用户
+//     *
+//     * @param username 用户名
+//     * @return 用户
+//     */
+//    @PostMapping(path = "/getUserByUsername")
+//    public @ResponseBody
+//    User getUserByUsername(@RequestParam String username) {
+//        return userService.queryUserByUsername(username);
+//    }
+
 }

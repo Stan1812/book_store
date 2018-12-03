@@ -4,12 +4,15 @@ import com.expr.bookstore.entity.OrderItem;
 import com.expr.bookstore.entity.Orders;
 import com.expr.bookstore.services.OrderItemService;
 import com.expr.bookstore.services.OrdersService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * 订单控制层
@@ -24,13 +27,24 @@ public class OrdersController {
     @Autowired
     private OrderItemService orderItemService;
 
+
     @PostMapping(path = "/add")
     public @ResponseBody
-    Orders addNewOrders(@RequestBody Orders order) {
-        Double price = order.getPrice();
-        Boolean state = order.getState();
-        Long userId = order.getId();
-        return ordersService.addOrders(price, state, userId);
+    Map addNewOrders(@RequestBody Map order, @RequestAttribute Claims claims) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<OrderItem> orderItems = mapper.convertValue(order.get("book"), new TypeReference<List<OrderItem>>() {
+        });
+        Double price = Double.valueOf(order.get("price").toString());
+        Long userId = Long.parseLong(claims.getId());
+        Timestamp date = new Timestamp(new Date().getTime());
+        Orders savedOrder = ordersService.addOrders(date, price, userId);
+        Long orderID = savedOrder.getId();
+        for (OrderItem orderItem : orderItems) {
+            orderItemService.addOrderItem(orderItem.getQuantity(), orderItem.getPrice(), orderID, orderItem.getBookId());
+        }
+        HashMap<String, String> res = new HashMap<String, String>();
+        res.put("message", "add success");
+        return res;
     }
 
     @GetMapping(path = "/deleteById")
@@ -47,13 +61,16 @@ public class OrdersController {
      */
     @GetMapping(path = "/queryAllByUserId")
     @ResponseBody
-    public LinkedHashMap<Orders, List<OrderItem>> queryAllByUserId(@RequestParam Long userId) {
-        LinkedHashMap<Orders, List<OrderItem>> map = new LinkedHashMap<>();
+    public List<Map> queryAllByUserId(@RequestParam Long userId) {
+        List <Map> res = new ArrayList<Map>();
         List<Orders> orders = ordersService.queryOrdersByUserId(userId);
-        for (Orders orders1 : orders) {
-            List<OrderItem> orderItemList = orderItemService.queryOrderItemsByOrderId(orders1.getId());
-            map.put(orders1, orderItemList);
+        for (Orders order1 : orders) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<OrderItem> orderItemList = orderItemService.queryOrderItemsByOrderId(order1.getId());
+            map.put("book", orderItemList);
+            map.put("orderDetail",order1);
+            res.add(map);
         }
-        return map;
+        return res;
     }
 }

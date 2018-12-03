@@ -18,8 +18,8 @@ public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, Lon
 
     @Transactional
     @Modifying
-    @Query("update ShoppingCart set quantity=?1 where id=?2")
-    int updateShoppingCart(Integer quantity, Long id);
+    @Query("update ShoppingCart set quantity=?1 where id=?2 and userId=?3")
+    int updateShoppingCart(Integer quantity, Long id,Long userId);
 
     @Transactional
     void deleteShoppingCartById(Long id);

@@ -8,7 +8,7 @@ public interface ShoppingCartServce {
 
     ShoppingCart addNewShoppingCart(Long userId, Long bookId);
 
-    int updateShoppingCart(Integer quantity, Long id);
+    int updateShoppingCart(Integer quantity, Long id,Long userId);
 
     void deleteShoppingCart(Long id);
 

@@ -22,6 +22,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
     /**
      * 通过userId和bookId添加一项到数据库，即在点击加入购物车时调用此服务
      * 如果该项购物车已存在，就更新，否则，就数据库插入
+     *
      * @param userId 用户id
      * @param bookId 书籍id
      * @return sc ShoppingCart的实体
@@ -29,14 +30,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
     @Override
     public ShoppingCart addNewShoppingCart(Long bookId, Long userId) {
         Book book = bookRepo.findBookById(bookId);
+        String bookname = book.getName();
+        String bookAuthor = book.getAuthor();
         ShoppingCart sc = scRepo.findShoppingCartByBookIdAndUserId(bookId, userId);
         //购物车已经存在了该项
         if (sc != null) {
             sc.setQuantity(sc.getQuantity() + 1);
-            updateShoppingCart(sc.getQuantity(), sc.getId());
-        }
-        else {
-            sc = new ShoppingCart(1, bookId, userId, book.getPrice());
+            updateShoppingCart(sc.getQuantity(), sc.getId(),sc.getUserId());
+        } else {
+            sc = new ShoppingCart(1, bookId, userId, bookname, book.getPrice(), bookAuthor);
             scRepo.save(sc);
         }
         return sc;
@@ -44,18 +46,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
 
     /**
      * 通过购物车项id更新购物车项的数量
+     *
      * @return 一个整数
      */
     @Override
-    public int updateShoppingCart(Integer quantity, Long id) {
+    public int updateShoppingCart(Integer quantity, Long id,Long userId) {
         if (quantity >= 1) {
-            return scRepo.updateShoppingCart(quantity, id);
+            return scRepo.updateShoppingCart(quantity,id,userId);
         }
         return -1;//禁止更新
     }
 
     /**
      * 通过id删除购物车项
+     *
      * @param id 购物车项id
      */
     @Override
@@ -65,6 +69,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartServce {
 
     /**
      * 通过用户id查询该用户的所有购物车项
+     *
      * @param userId 用户id
      * @return 购物车列表
      */
