@@ -3,6 +3,7 @@ package com.expr.bookstore.controllers;
 
 import com.expr.bookstore.entity.User;
 import com.expr.bookstore.services.UserService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,14 +24,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/login")
-    public @ResponseBody
-    Map login(@RequestBody User receiveuser) throws ServletException {
+    @ResponseBody
+    public Map login(@RequestBody User receiveuser) throws ServletException {
         String username = receiveuser.getUsername();
         String password = receiveuser.getPassword();
-        if (username.equals("")  || password.equals(""))
+        if (username.equals("") || password.equals(""))
             throw new ServletException("Please fill in username and password");
         User user = userService.queryUserByUsername(username);
-        HashMap<String, String> res = new HashMap<String, String>();
+        HashMap<String, Object> res = new HashMap<String, Object>();
         String pass = user.getPassword();
         if (pass.equals(password)) {
             Long id = user.getId();
@@ -41,7 +43,7 @@ public class UserController {
                     .setId(id.toString())
                     .signWith(SignatureAlgorithm.HS256, "secretkey")
                     .compact();
-            res.put("message", "login success");
+            res.put("status", 1);
             res.put("token", jwtToken);
         } else {
             res.put("message", "login failed");
@@ -56,22 +58,27 @@ public class UserController {
      * @return 1
      */
     @PostMapping(path = "/register")
-    public @ResponseBody
-    Integer addNewUser(@RequestBody User user) {
+    @ResponseBody
+    public Map addNewUser(@RequestBody User user) {
         String username = user.getUsername();
         String password = user.getPassword();
         String phone = user.getPhone();
         String email = user.getEmail();
         String address = user.getAddress();
-            User adjustUser = userService.queryUserByUsername(username);
-            if (adjustUser == null) {
-                return 0;
-            }
-            else {
-                userService.addUser(username, password, phone, email, address);
-                return 1;
-            }
+        Map<String, Object> res = new HashMap<>();
+        User adjustUser = userService.queryUserByUsername(username);
+        System.out.print(adjustUser);
+        if (adjustUser == null) {
+            userService.addUser(username, password, phone, email, address);
+            res.put("status", 1);
+            res.put("message", "注册成功");
+        } else {
+            res.put("status", 0);
+            res.put("message", "用户名已存在");
+        }
+        return res;
     }
+
     /**
      * 通过用户名查询用户
      *
@@ -79,21 +86,38 @@ public class UserController {
      * @return 用户
      */
     @GetMapping(path = "/getUserByUsername")
-    public @ResponseBody
-    User getUserByUsername(@RequestParam String username) {
+    @ResponseBody
+    public User getUserByUsername(@RequestParam String username) {
         return userService.queryUserByUsername(username);
     }
 
-//    /**
-//     * 通过用户名查询用户
-//     *
-//     * @param username 用户名
-//     * @return 用户
-//     */
-//    @PostMapping(path = "/getUserByUsername")
-//    public @ResponseBody
-//    User getUserByUsername(@RequestParam String username) {
-//        return userService.queryUserByUsername(username);
-//    }
+    /**
+     * 是否admin
+     */
+    @GetMapping(path = "/authAdmin")
+    public Map authAdmin(@RequestAttribute Claims claims) {
+        Map<String, Object> res = new HashMap<String, Object>();
+        Long userId = Long.parseLong(claims.getId());
+        User userRes = userService.queryUserById(userId);
+        String username = userRes.getUsername();
+        if (username.equals("admin")) {
+            res.put("status", 1);
+            res.put("message", "admin auth success");
+        } else {
+            res.put("status", 0);
+            res.put("message", "no permission");
+        }
+        return res;
+    }
+
+    /**
+     * @return 所有用户
+     */
+    @GetMapping(path = "/allUser")
+    public @ResponseBody
+    List<User> getAllUser() {
+        return userService.findAll();
+    }
+
 
 }
