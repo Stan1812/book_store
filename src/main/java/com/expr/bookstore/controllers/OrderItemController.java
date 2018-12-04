@@ -4,7 +4,10 @@ import com.expr.bookstore.entity.OrderItem;
 import com.expr.bookstore.services.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -18,8 +21,8 @@ public class OrderItemController {
     @PostMapping(path = "/add")
     public @ResponseBody
     OrderItem addOrderItem(@RequestParam Integer quantity, @RequestParam Double price,
-                           @RequestParam Long ordersId, @RequestParam Long bookId) {
-        return orderItemService.addOrderItem(quantity, price, ordersId, bookId);
+                           @RequestParam Long ordersId, @RequestParam Long bookId, @RequestParam String bookName) {
+        return orderItemService.addOrderItem(quantity, price, ordersId, bookId, bookName);
     }
 
 //    @PostMapping(path = "/addQuantityOne")
@@ -34,7 +37,7 @@ public class OrderItemController {
 //        return orderItemService.updateQuantityAndPrice(number, price, id);
 //    }
 
-    @PostMapping(path="/queryById")
+    @PostMapping(path = "/queryById")
     @ResponseBody
     public OrderItem queryById(@RequestParam Long id) {
         return orderItemService.queryOrderItemById(id);
@@ -47,7 +50,8 @@ public class OrderItemController {
     }
 
     @PostMapping(path = "/delete")
-    public @ResponseBody void deleteOrderItem(@RequestParam Long id) {
+    public @ResponseBody
+    void deleteOrderItem(@RequestParam Long id) {
         orderItemService.deleteOrderItemById(id);
     }
 }

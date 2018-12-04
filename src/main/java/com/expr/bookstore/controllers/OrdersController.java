@@ -2,8 +2,10 @@ package com.expr.bookstore.controllers;
 
 import com.expr.bookstore.entity.OrderItem;
 import com.expr.bookstore.entity.Orders;
+import com.expr.bookstore.entity.ShoppingCart;
 import com.expr.bookstore.services.OrderItemService;
 import com.expr.bookstore.services.OrdersService;
+import com.expr.bookstore.services.ShoppingCartServce;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -27,7 +29,8 @@ public class OrdersController {
     @Autowired
     private OrderItemService orderItemService;
 
-
+    @Autowired
+    private ShoppingCartServce  shoppingCartServce;
     @PostMapping(path = "/add")
     public @ResponseBody
     Map addNewOrders(@RequestBody Map order, @RequestAttribute Claims claims) {
@@ -40,7 +43,7 @@ public class OrdersController {
         Orders savedOrder = ordersService.addOrders(date, price, userId);
         Long orderID = savedOrder.getId();
         for (OrderItem orderItem : orderItems) {
-            orderItemService.addOrderItem(orderItem.getQuantity(), orderItem.getPrice(), orderID, orderItem.getBookId());
+            orderItemService.addOrderItem(orderItem.getQuantity(), orderItem.getPrice(), orderID, orderItem.getBookId(),orderItem.getBookName());
         }
         HashMap<String, String> res = new HashMap<String, String>();
         res.put("message", "add success");
@@ -56,19 +59,19 @@ public class OrdersController {
     /**
      * 查询某用户的所有订单以及订单中的商品项(OrderItem)
      *
-     * @param userId 用户id
      * @return 订单及对应订单项
      */
     @GetMapping(path = "/queryAllByUserId")
     @ResponseBody
-    public List<Map> queryAllByUserId(@RequestParam Long userId) {
-        List <Map> res = new ArrayList<Map>();
+    public List<Map> queryAllByUserId(@RequestAttribute Claims claims) {
+        List<Map> res = new ArrayList<Map>();
+        Long userId = Long.parseLong(claims.getId());
         List<Orders> orders = ordersService.queryOrdersByUserId(userId);
         for (Orders order1 : orders) {
             Map<String, Object> map = new HashMap<String, Object>();
             List<OrderItem> orderItemList = orderItemService.queryOrderItemsByOrderId(order1.getId());
             map.put("book", orderItemList);
-            map.put("orderDetail",order1);
+            map.put("orderDetail", order1);
             res.add(map);
         }
         return res;
