@@ -3,9 +3,11 @@ package com.expr.bookstore.controllers;
 import com.expr.bookstore.entity.OrderItem;
 import com.expr.bookstore.entity.Orders;
 import com.expr.bookstore.entity.ShoppingCart;
+import com.expr.bookstore.entity.User;
 import com.expr.bookstore.services.OrderItemService;
 import com.expr.bookstore.services.OrdersService;
 import com.expr.bookstore.services.ShoppingCartServce;
+import com.expr.bookstore.services.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -24,13 +26,14 @@ import java.util.*;
 public class OrdersController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private OrdersService ordersService;
 
     @Autowired
     private OrderItemService orderItemService;
 
-    @Autowired
-    private ShoppingCartServce  shoppingCartServce;
     @PostMapping(path = "/add")
     public @ResponseBody
     Map addNewOrders(@RequestBody Map order, @RequestAttribute Claims claims) {
@@ -75,5 +78,41 @@ public class OrdersController {
             res.add(map);
         }
         return res;
+    }
+
+    /**
+     * 查询所有用户的订单，服务端
+     * @return 所有用户的订单
+     */
+    @GetMapping(path = "/queryAll")
+    @ResponseBody
+    public List<List<Map>> queryAll() {
+        List<List<Map>> listMap = new ArrayList<>();
+        List<User> users = userService.findAll();
+        for (User user : users) {
+            List<Map> res = new ArrayList<>();
+            List<Orders> orders = ordersService.queryOrdersByUserId(user.getId());
+            for (Orders orders1: orders) {
+                Map<String, Object> map = new HashMap<>();
+                List<OrderItem> orderItemList = orderItemService.queryOrderItemsByOrderId(orders1.getId());
+                map.put("book", orderItemList);
+                map.put("orderDetail", orders1);
+                res.add(map);
+            }
+            listMap.add(res);
+        }
+        return listMap;
+    }
+
+    /**
+     * 修改订单状态
+     * @param state 订单最终状态
+     * @param id 订单id
+     * @return 更新的数据库中的行号
+     */
+    @PostMapping(path = "/updateStatus")
+    @ResponseBody
+    public int updateStateById(@RequestParam Boolean state, @RequestParam Long id) {
+        return ordersService.updateStateById(state, id);
     }
 }

@@ -41,4 +41,15 @@ public class OrdersServiceImpl implements OrdersService {
     public void deleteOrderById(Long id) {
         ordersRepo.deleteById(id);
     }
+
+    /**
+     * 修改订单状态
+     * @param state 状态
+     * @param id 订单id
+     * @return 更新的行
+     */
+    @Override
+    public int updateStateById(Boolean state, Long id) {
+        return ordersRepo.updateStateById(state, id);
+    }
 }

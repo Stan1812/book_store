@@ -4,10 +4,7 @@ import com.expr.bookstore.entity.Orders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.LongFunction;
 
 public interface OrdersService {
 
@@ -18,4 +15,6 @@ public interface OrdersService {
     @Transactional
     void deleteOrderById(Long id);
 
+    @Transactional
+    int updateStateById(Boolean state, Long id);
 }
