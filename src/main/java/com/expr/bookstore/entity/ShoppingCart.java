@@ -11,27 +11,24 @@ import javax.persistence.Id;
 @Entity
 public class ShoppingCart {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Integer quantity;
-
     private Long bookId;
-
     private Long userId;
-
+    private String bookName;
     private Double price;
-
+    private String bookAuthor;
     public ShoppingCart() {
     }
-
-    public ShoppingCart(Integer quantity, Long bookId, Long userId, Double price) {
+    public ShoppingCart(Integer quantity, Long bookId, Long userId, String bookName, Double price, String bookAuthor) {
         this.quantity = quantity;
         this.bookId = bookId;
         this.userId = userId;
+        this.bookName = bookName;
         this.price = price;
+        this.bookAuthor = bookAuthor;
     }
-
     public Long getId() {
         return id;
     }
@@ -50,6 +47,22 @@ public class ShoppingCart {
 
     public Long getBookId() {
         return bookId;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public String getBookAuthor() {
+        return bookAuthor;
+    }
+
+    public void setBookAuthor(String bookAuthor) {
+        this.bookAuthor = bookAuthor;
     }
 
     public void setBookId(Long bookId) {

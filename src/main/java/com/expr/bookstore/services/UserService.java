@@ -2,16 +2,13 @@ package com.expr.bookstore.services;
 
 import com.expr.bookstore.entity.User;
 
+import java.util.List;
+
 public interface UserService {
 
     User addUser(String username, String password, String phone, String email, String address);//添加用户
-
-//    boolean isExistedByUsername(String username);//判断用户是否存在
-//
-//    boolean isExistedByPhone(String phone);//判断用户是否存在
-
+    User login(String username, String password);
     User queryUserByUsername(String username);
-
-    User queryUserByPhone(String phone);
-
+    List<User> findAll();
+    User queryUserById(Long id);
 }

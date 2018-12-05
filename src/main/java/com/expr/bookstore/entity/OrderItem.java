@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Integer quantity;//该项所具有同种商品的数量
@@ -22,14 +22,19 @@ public class OrderItem {
 
     private Long bookId;//书籍的id
 
+
+
+    private String bookName;
+
     public OrderItem() {
     }
 
-    public OrderItem(Integer quantity, Double price, Long orderId, Long bookId) {
+    public OrderItem(Integer quantity, Double price, Long orderId, Long bookId, String bookName) {
         this.quantity = quantity;
         this.price = price;
         this.orderId = orderId;
         this.bookId = bookId;
+        this.bookName = bookName;
     }
 
     public Long getId() {
@@ -71,6 +76,13 @@ public class OrderItem {
     public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
 
     @Override
     public String toString() {
@@ -80,6 +92,9 @@ public class OrderItem {
                 ", price=" + price +
                 ", orderId=" + orderId +
                 ", bookId=" + bookId +
+                ", bookName='" + bookName + '\'' +
                 '}';
     }
+
+
 }

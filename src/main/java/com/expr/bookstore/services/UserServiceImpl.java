@@ -5,6 +5,9 @@ import com.expr.bookstore.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -23,43 +26,26 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(user);
     }
 
-//    /**
-//     * 在数据库中查找用户名为username的用户是否存在
-//     * @param username 用户名
-//     * @return 存在与否
-//     */
-//    @Override
-//    public boolean isExistedByUsername(String username) {
-//        return UserRepo.findUserByUsername(username).isPresent();
-//    }
-//
-//    /**
-//     * 在数据库中查找手机号为phone的用户是否存在
-//     * @param phone 手机号
-//     * @return 存在与否
-//     */
-//    @Override
-//    public boolean isExistedByPhone(String phone) {
-//        return UserRepo.findUserByPhone(phone).isPresent();
-//    }
+    @Override
+    public User login(String userName,String password){
+     return  new User();
+    }
 
-    /**
-     * 在数据库中查找用户名为username的用户
-     * @param username 用户名
-     * @return 查询到的数据
-     */
     @Override
     public User queryUserByUsername(String username) {
         return userRepo.findUserByUsername(username);
     }
-
+    @Override
+    public List<User> findAll(){
+        return userRepo.findAll();
+    }
     /**
      * 在数据库中查询手机号为phone的用户
-     * @param phone 手机号
+     * @param id
      * @return 用户
      */
     @Override
-    public User queryUserByPhone(String phone) {
-        return userRepo.findUserByPhone(phone);
+    public User queryUserById(Long id) {
+        return userRepo.findUserById(id);
     }
 }

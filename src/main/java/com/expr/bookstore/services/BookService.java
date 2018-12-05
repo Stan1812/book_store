@@ -1,6 +1,7 @@
 package com.expr.bookstore.services;
 
 import com.expr.bookstore.entity.Book;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -11,9 +12,13 @@ public interface BookService {
     List<Book> queryAllBooks();
 
     List<Book> queryBooksByCategoryId(Long categoryId);
-
+    List<Book> queryChoices();
     Book queryBooksById(Long id);
 
     Book queryBookByName(String name);
+
+    List<Book> findBookPage(Integer page, Integer size);
+
+    List<Book> findBookPageByCategoryId(Long categoryId, Integer page, Integer size);
 
 }

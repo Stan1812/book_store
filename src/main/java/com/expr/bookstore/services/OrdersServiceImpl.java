@@ -1,5 +1,6 @@
 package com.expr.bookstore.services;
 
+import com.expr.bookstore.entity.Book;
 import com.expr.bookstore.entity.Orders;
 import com.expr.bookstore.dao.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,10 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private OrdersRepository ordersRepo;
 
-    /**
-     * 添加购物车到数据库
-     * @param price 总价格
-     * @param state 状态
-     * @param userId 用户id
-     * @return 1
-     */
+
     @Override
-    public Orders addOrders(Double price, Boolean state, Long userId) {
-        Orders orders = new Orders(new Timestamp(new Date().getTime()), price, state, userId);
+    public Orders addOrders(Timestamp date, Double price,  Long userId) {
+        Orders orders = new Orders(date, price, false, userId);
         return ordersRepo.save(orders);
     }
 
@@ -45,5 +40,16 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public void deleteOrderById(Long id) {
         ordersRepo.deleteById(id);
+    }
+
+    /**
+     * 修改订单状态
+     * @param state 状态
+     * @param id 订单id
+     * @return 更新的行
+     */
+    @Override
+    public int updateStateById(Boolean state, Long id) {
+        return ordersRepo.updateStateById(state, id);
     }
 }

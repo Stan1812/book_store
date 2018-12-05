@@ -17,8 +17,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemRepository ordersItemRepo;
 
     @Override
-    public OrderItem addOrderItem(Integer quantity, Double price, Long orderId, Long bookId) {
-        OrderItem orderItem = new OrderItem(quantity, price, orderId, bookId);
+    public OrderItem addOrderItem(Integer quantity, Double price, Long orderId, Long bookId,String bookName) {
+        OrderItem orderItem = new OrderItem(quantity, price, orderId, bookId,bookName);
         ordersItemRepo.save(orderItem);
         return orderItem;
     }
